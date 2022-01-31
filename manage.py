@@ -3,6 +3,8 @@
 import os
 import sys
 
+import socket
+socket.getaddrinfo('localhost', 8080)
 
 def main():
     """Run administrative tasks."""
