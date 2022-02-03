@@ -10,4 +10,10 @@ from . import views
 # name='post_list' is the name of the URL to identify the view
 urlpatterns = [
     path('', views.post_list, name='post_list'),
+
+    #create a URL to a post's detail
+    # URL in blog/urls.py points to a view named post_detail that will show a blog post
+    path('post/<int:pk>/', views.post_detail, name='post_detail'),
+
+
 ]

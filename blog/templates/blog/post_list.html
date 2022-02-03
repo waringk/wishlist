@@ -1,17 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Django Girls blog</title>
-    </head>
-    <header>
-        <h1><a href="/">Django Girls Blog</a></h1>
-    </header>
+{% extends 'blog/base.html' %}
 
+{% block content %}
     {% for post in posts %}
-        <article>
-            <time>published: {{ post.published_date }}</time>
-            <h2><a href="">{{ post.title }}</a></h2>
+        <article class="post">
+            <time class="date">
+                {{ post.published_date }}
+            </time>
+
+            <! ––
+            Link from a post title in the post list to the post's detail page
+            uses Django template tags to create a URL
+            expects a URL in blog/urls.py with the name=post_detail
+            access pk for primary key of post in database with post.pk
+            ––>
+            <h2><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
             <p>{{ post.text|linebreaksbr }}</p>
         </article>
     {% endfor %}
-</html>
+{% endblock %}

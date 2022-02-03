@@ -11,6 +11,9 @@ from django.utils import timezone
 # import the Post model
 from .models import Post
 
+# if there is no post with given pk, display Page Not Found 404 page
+from django.shortcuts import render, get_object_or_404
+
 
 # post_list takes a request and returns the value it gets from render
 # renders the template blog/post_list.html+
@@ -23,3 +26,9 @@ def post_list(request):
     # the template file 'blog/post_list.html' and
     # things (posts) for the template to use
     return render(request, 'blog/post_list.html', {'posts': posts})
+
+
+# post's detail view, takes in the parameter pk for the post primary key
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, 'blog/post_detail.html', {'post': post})
