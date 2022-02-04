@@ -14,7 +14,10 @@ from .models import Post
 # if there is no post with given pk, display Page Not Found 404 page
 from django.shortcuts import render, get_object_or_404
 
+# import redirect to redirect a user to a newly created page
 from django.shortcuts import redirect
+
+# import PostForm to construct the PostForm with data from a form
 from .forms import PostForm
 
 # post_list takes a request and returns the value it gets from render
@@ -35,30 +38,55 @@ def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     return render(request, 'blog/post_detail.html', {'post': post})
 
-# view to create a new Post form and passes it to the template
+# form view to create a new Blog Post
+# calls PostForm() and passes it to the template
+# retrieve data in request.POST - contains the fields from the form
+
+
 def post_new(request):
+
+    # if we access the page for the first time, we want a blank form
+    # otherwise, we want to send the form data to the view
+
+    # if the method is POST, we construct the PostForm with the data form the form
     if request.method == "POST":
         form = PostForm(request.POST)
+
+        # check that the form data is valid, and if so, we can save it
+        # adds an author
+        # commit=False means we dont want to save the Post model yet so we can add the author
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
+            # redirects the user to the newly created blog post in the post_detail page
+            # redirects to the new blog post based on primary key identifier
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm()
     return render(request, 'blog/post_edit.html', {'form': form})
 
 
+# similar method to post_new
+# passes in pk parameter from URLs
 def post_edit(request, pk):
+
+    # get the Post model we want to edit
     post = get_object_or_404(Post, pk=pk)
+
+    # when we create a form
     if request.method == "POST":
+        # we pass this post as an instance when we save and when we open to edit
         form = PostForm(request.POST, instance=post)
+
+        # validate the data before saving
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
+            # then redirect the user to the post details
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)

@@ -2,8 +2,15 @@
 
 {% block content %}
     <h2>New post</h2>
+
+    <! ––  {% csrf_token %} makes forms secure  ––>
     <form method="POST" class="post-form">{% csrf_token %}
+
+
+        <! ––  display the form with {{ form.as_p }}  ––>
         {{ form.as_p }}
+
+        <! ––  save button to save an edit to a post  ––>
         <button type="submit" class="save btn btn-secondary">Save</button>
     </form>
 {% endblock %}

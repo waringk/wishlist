@@ -3,6 +3,8 @@
 {% block content %}
     <article class="post">
         <aside class="actions">
+
+            <! ––  if a user is signed in, they can edit a post  ––>
             {% if user.is_authenticated %}
                  <a class="btn btn-secondary" href="{% url 'post_edit' pk=post.pk %}">
                     {% include './icons/pencil-fill.svg' %}

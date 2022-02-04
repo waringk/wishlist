@@ -15,4 +15,6 @@ class PostForm(forms.ModelForm):
         model = Post
 
         # specify the fields that should be on the form
+        # author will be currently logged in, and created date is set automatically when post is created
+
         fields = ('title', 'text',)

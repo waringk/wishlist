@@ -15,7 +15,11 @@ urlpatterns = [
     # URL in blog/urls.py points to a view named post_detail that will show a blog post
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
 
+    # create a URL to add a blog post
+    # URL in blog/urls.py points to a view named post_new that will add a new blog post
     path('post/new/', views.post_new, name='post_new'),
 
+    # create a URL to edit a blog post
+    # URL in blog/urls.py points to a view named post_edit that will edit a blog post
     path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
 ]
