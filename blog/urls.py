@@ -15,5 +15,7 @@ urlpatterns = [
     # URL in blog/urls.py points to a view named post_detail that will show a blog post
     path('post/<int:pk>/', views.post_detail, name='post_detail'),
 
+    path('post/new/', views.post_new, name='post_new'),
 
+    path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
 ]

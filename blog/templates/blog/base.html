@@ -10,6 +10,18 @@
     <body>
     <header class="page-header">
       <div class="container">
+
+          <! ––
+            Link to a page within the form
+            Create a new view called post_new
+            Use a Django template directive caLled include
+                will inject file contnet into Django template
+            ––>
+            {% if user.is_authenticated %}
+                <a href="{% url 'post_new' %}" class="top-menu">
+                    {% include './icons/file-earmark-plus.svg' %}
+                </a>
+            {% endif %}
           <h1><a href="/">Django Girls Blog</a></h1>
       </div>
     </header>
