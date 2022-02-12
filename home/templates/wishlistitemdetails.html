@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% load social_share %}
+
+{% block content %}
+
+    <h1>Wish List Item Details</h1>
+
+  {% for WishListItem in object_list %}
+
+<form action="{% url 'wish_list_item_details_tags' WishListItem.id %}" method="get">{% csrf_token %}
+        <button type="submit">Generate Tags</button>
+      </form>
+
+    <p>Item ID is {{ WishListItem.id }}</p>
+    <p>Item name is {{ WishListItem.name }}</p>
+
+    <p>{% send_email WishListItem.name "Wish List Item: {{WishListItem.name}}. Check it out!" WishListItem.name "Share via email" %}</p>
+    <p>{% post_to_twitter "Wish List Item: {{WishListItem.name}}. Check it out!" "Post to Twitter" %}<p>
+  {% endfor %}
+
+
+{% endblock content %}

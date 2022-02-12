@@ -3,7 +3,7 @@
 from django.urls import path
 from . import views
 
-from .views import HomePageView, ItemSearchPageView, WishListPageView
+from .views import HomePageView, WishListView, WishListSearchResultsView, ItemSearchPageView
 
 # add our first URL pattern
 # assign a view called post_view to the root URL
@@ -12,21 +12,21 @@ from .views import HomePageView, ItemSearchPageView, WishListPageView
 # name='post_list' is the name of the URL to identify the view
 urlpatterns = [
 
-    path("wishlist/", WishListPageView.as_view(), name="wishlist"),
-    path("itemsearch/", ItemSearchPageView.as_view(), name="itemsearch"),
+
+    path('wishlist/<int:id>/tags', views.wish_list_item_details_tags, name='wish_list_item_details_tags'),
+
+    path('wishlist/<int:id>/', views.wish_list_item_details, name='wish_list_item_details'),
+
+    path('delete/<int:id>/', views.delete, name='delete'),
+
+    path('deleteconfirm/<int:id>/', views.deleteconfirm, name='deleteconfirm'),
+
+    path('item_search/', ItemSearchPageView.as_view(), name='item_search'),
+
+    path("wishlist/", WishListView.as_view(), name="wishlist"),
+
+    path("wish_list_search_results/", WishListSearchResultsView.as_view(), name="wish_list_search_results"),
+
     path("", HomePageView.as_view(), name="home"),
 
-    path('', views.post_list, name='post_list'),
-
-    #create a URL to a post's detail
-    # URL in home/urls.py points to a view named post_detail that will show a home post
-    path('post/<int:pk>/', views.post_detail, name='post_detail'),
-
-    # create a URL to add a home post
-    # URL in home/urls.py points to a view named post_new that will add a new home post
-    path('post/new/', views.post_new, name='post_new'),
-
-    # create a URL to edit a home post
-    # URL in home/urls.py points to a view named post_edit that will edit a home post
-    path('post/<int:pk>/edit/', views.post_edit, name='post_edit'),
 ]

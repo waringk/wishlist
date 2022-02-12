@@ -1,20 +1,20 @@
 # import Django forms
 from django import forms
+from django.db import models
+from django.views.decorators.csrf import csrf_exempt
 
-# import our Post model
-from .models import Post
+from .models import WishListItem
 
-# name of form is PostForm
-# PostForm is a ModelForm, will save the result of the form to the model
-# use the form in a view and display it in a template
-class PostForm(forms.ModelForm):
 
+class WishListForm(forms.ModelForm):
     # tell Django which model should be used to create the form
-    # uses model Post
+
+    selected = models.BooleanField(default=False)
+    selected.required = False
+
     class Meta:
-        model = Post
-
+        model = WishListItem
         # specify the fields that should be on the form
-        # author will be currently logged in, and created date is set automatically when post is created
+        fields = ('name', 'price')
 
-        fields = ('title', 'text',)
+

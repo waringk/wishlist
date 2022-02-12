@@ -1,33 +1,28 @@
 from django.conf import settings
 from django.db import models
-from django.utils import timezone
 
 
-# define our model object
-# our model is Post
-# models.Model tells Django that Post is a Django Model, so it will be saved in the database
-class Post(models.Model):
-    # define properties  of our Posts
+class WishListItemTag(models.Model):
+    verbose_name = "WishListItemTags"
+    name = models.CharField(max_length=255, null=True)
 
-    # models.ForeignKey - this is a link to another model
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    # models.CharField - to define text with a limited number of characters
-    title = models.CharField(max_length=200)
-
-    # models.TextField - for long text without a limit
-    text = models.TextField()
-
-    # models.DateTimeField - for a date and time
-    created_date = models.DateTimeField(default=timezone.now)
-    published_date = models.DateTimeField(blank=True, null=True)
-
-    # method to record a published date and save/publish the home post
-    def publish(self):
-        self.published_date = timezone.now()
-        self.save()
-
-    # returns a string with a Post title
     def __str__(self):
-        return self.title
+        return self.name
 
+
+class WishListItem(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    verbose_name = "WishListItems"
+    selected = models.BooleanField(default=False)
+    selected.required = False
+    tags = models.ManyToManyField(WishListItemTag)
+
+    def __str__(self):
+        return self.name
+
+
+class WishListTagQuantity(models.Model):
+    tag = models.ForeignKey(WishListItemTag, on_delete=models.CASCADE)
+    item = models.ForeignKey(WishListItem, on_delete=models.CASCADE)
+    extra_tags = models.BooleanField(default=False)

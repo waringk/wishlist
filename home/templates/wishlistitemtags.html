@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% load social_share %}
+
+{% block content %}
+
+    <h1>Wish List Item Details</h1>
+
+  {% for WishListItem in object_list %}
+
+    <p>Item ID is {{ WishListItem.id }}</p>
+    <p>Item name is {{ WishListItem.name }}</p>
+
+  {% endfor %}
+
+
+{% endblock content %}

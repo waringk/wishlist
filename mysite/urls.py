@@ -25,4 +25,5 @@ urlpatterns = [
     # import home.urls and the include function
     # Django will redirect everything to home.urls and look for further instructions there
     path('', include('home.urls')),
+
 ]
