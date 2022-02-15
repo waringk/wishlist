@@ -40,8 +40,8 @@ h4 {
     float: right;
 }
 
-.post-form textarea,
-.post-form input {
+.wish-list-form textarea,
+.wish-list-form input {
     width: 100%;
 }
 
@@ -78,4 +78,8 @@ h4 {
 .btn-secondary:hover {
     color: #FFFFFF;
     background-color: #C25100;
+}
+
+div button{
+    display:inline-block;
 }

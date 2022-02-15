@@ -1,0 +1,1 @@
+[{"word":"drink","score":2772},{"word":"brown","score":2553},{"word":"potable","score":773},{"word":"beverage","score":769},{"word":"foodstuff","score":354},{"word":"drinkable","score":120},{"word":"brownness","score":47},{"word":"food product","score":14}]

@@ -16,7 +16,7 @@ class WishListItem(models.Model):
     verbose_name = "WishListItems"
     selected = models.BooleanField(default=False)
     selected.required = False
-    tags = models.ManyToManyField(WishListItemTag)
+    tags = models.ManyToManyField(WishListItemTag, through='WishListTagQuantity')
 
     def __str__(self):
         return self.name

@@ -3,7 +3,7 @@ from django import forms
 from django.db import models
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import WishListItem
+from .models import WishListItem, WishListItemTag, WishListTagQuantity
 
 
 class WishListForm(forms.ModelForm):

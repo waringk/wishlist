@@ -1,0 +1,1 @@
+[{"word":"sweet","score":2286},{"word":"confectionery","score":937},{"word":"confection","score":807},{"word":"sweeten","score":342},{"word":"dulcify","score":124},{"word":"edulcorate","score":105},{"word":"dulcorate","score":60}]

@@ -13,7 +13,10 @@ from .views import HomePageView, WishListView, WishListSearchResultsView, ItemSe
 urlpatterns = [
 
 
-    path('wishlist/<int:id>/tags', views.wish_list_item_details_tags, name='wish_list_item_details_tags'),
+
+    path('wishlist/tags/<str:tag>/', views.wish_list_item_tag_results, name='wish_list_item_tag_results'),
+
+    path('wishlist/add', views.wish_list_add, name='wish_list_add'),
 
     path('wishlist/<int:id>/', views.wish_list_item_details, name='wish_list_item_details'),
 

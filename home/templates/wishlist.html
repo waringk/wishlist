@@ -6,16 +6,19 @@
 {% block content %}
 <h1>Wish List page</h1>
 
+<a href="{% url 'wish_list_add' %}"><button type="submit">Add An Item ❤</button></a>
+<p></p>
 <form action="{% url 'wish_list_search_results' %}" method="get">
   <input name="q" type="text" placeholder="Search in Your Wish List...">
 </form>
-<p></p>
-<ul>
+
   {% for WishListItem in object_list %}
+    <li>
       <a href="{% url 'wish_list_item_details' id=WishListItem.id %}">{{ WishListItem.name }}</a>
-      <form action="{% url 'delete' WishListItem.id %}" method="post">{{ WishListItem.name }}, {{ WishListItem.price }}{% csrf_token %}<button type="submit">Delete</button></form>
-  {% endfor %}
-</ul>
+      <form action="{% url 'delete' WishListItem.id %}" method="post">{{ WishListItem.name }}, {{ WishListItem.price }}{% csrf_token %}<button type="submit">Delete Item 🗑</button></form>
+    </li>
+    {% endfor %}
+
 
 
 {% endblock content %}

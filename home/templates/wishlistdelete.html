@@ -7,12 +7,13 @@
 
   {% for WishListItem in object_list %}
 
-<p>Are you sure you want to delete this item? {{ WishListItem.name }}</p>
-<form action="{% url 'deleteconfirm' WishListItem.id %}" method="post">{% csrf_token %}
-        <button type="submit">Delete</button>
-      </form>
-  {% endfor %}
+<p>Are you sure you want to delete this item? {{ WishListItem.name }}
 
+<p></p>
+<div>
+<form action="{% url 'deleteconfirm' WishListItem.id %}" method="post">{% csrf_token %}<button type="submit">Delete</button></form><a href="{% url 'wishlist' %}"><button type="submit">Cancel</button></a>
+</div>
+  {% endfor %}
 
 
 {% endblock content %}

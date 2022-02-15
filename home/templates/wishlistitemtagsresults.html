@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <h1>Wish List Category: {{ tag_name }}</h1>
+
+
+  {% for WishListItem in object_list %}
+
+    <p>Item ID is {{ WishListItem.id }}</p>
+
+    <p>Item name is {{ WishListItem.name }}</p>
+    <a href="{% url 'wish_list_item_details' id=WishListItem.id %}">{{ WishListItem.name }}</a>
+  {% endfor %}
+
+
+
+
+{% endblock content %}
+
+
+

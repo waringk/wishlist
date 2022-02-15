@@ -11,13 +11,13 @@
   <input name="q" type="text" placeholder="Search in Your Wish List...">
 </form>
 
-<ul>
+
   {% for WishListItem in object_list %}
     <li>
       {{ WishListItem.name }}, {{ WishListItem.price }}
     </li>
   {% endfor %}
-</ul>
+
 
 
 {% endblock content %}

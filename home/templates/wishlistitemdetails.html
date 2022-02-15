@@ -4,19 +4,41 @@
 
 {% block content %}
 
-    <h1>Wish List Item Details</h1>
+  {% for WishListItem in object_list %}
+    <h1>Wish List Item: {{ WishListItem.name }}</h1>
+    {% endfor %}
 
   {% for WishListItem in object_list %}
-
-<form action="{% url 'wish_list_item_details_tags' WishListItem.id %}" method="get">{% csrf_token %}
-        <button type="submit">Generate Tags</button>
-      </form>
-
+    <p></p>
+    <p></p>
     <p>Item ID is {{ WishListItem.id }}</p>
     <p>Item name is {{ WishListItem.name }}</p>
 
-    <p>{% send_email WishListItem.name "Wish List Item: {{WishListItem.name}}. Check it out!" WishListItem.name "Share via email" %}</p>
-    <p>{% post_to_twitter "Wish List Item: {{WishListItem.name}}. Check it out!" "Post to Twitter" %}<p>
+    <form action="{% url 'delete' WishListItem.id %}" method="post">{% csrf_token %}<button type="submit">Delete From Wish List🗑</button></form>
+
+    <p>{% send_email WishListItem.name "Wish List Item: {{WishListItem.name}} Check it out!" WishListItem.name "mailto://📧’." %}</p>
+    <p>{% post_to_twitter "Wish List Item: {{WishListItem.name}}" "Check it out!" "Tweet This 💬" %}</p>
+    <p>{% post_to_facebook "Wish List Item: {{WishListItem.name}}" "Post to Facebook ✍" %}</p>
+
+
+    <p></p>
+    <p></p>
+
+    {% endfor %}
+    <script>
+      function generate_tags(id) {
+        id = id
+        $.ajax({
+          url: 'wish_list_item_details_tags/',
+          success: function(data) {
+            $('#DetailView').html(data);
+          }
+        });
+      };
+    </script>
+
+  {% for WishListItem in object_list %}    tagged in:{% for tag in WishListItem.tags.all %}<button type="button"><a href="{% url 'wish_list_item_tag_results' tag.name %}">{{ tag.name }}</a></button>{% endfor %}
+
   {% endfor %}
 
 

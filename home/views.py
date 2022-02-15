@@ -9,7 +9,9 @@ from django.shortcuts import render, get_object_or_404
 # import redirect to redirect a user to a newly created page
 from django.shortcuts import redirect
 
+import json
 
+from .forms import WishListForm
 
 from django.db.models import Q
 from django.shortcuts import render
@@ -21,14 +23,16 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django.views.generic import TemplateView, ListView
 
-from .models import WishListItem
+from .models import WishListItem, WishListItemTag, WishListTagQuantity
+
 # from .forms import DeleteWishListItem
 
-from .forms import WishListForm
+
+from time import sleep
 
 
 class HomePageView(TemplateView):
-    template_name = 'home.html'
+    template_name = 'base.html'
 
 
 class ItemSearchPageView(TemplateView):  # new
@@ -51,16 +55,6 @@ class WishListSearchResultsView(ListView):
         return object_list
 
 
-def delete_queryset1(request, id):
-    wish_list_item = get_object_or_404(WishListItem, id=id)
-
-    if request.method == 'POST':
-        wish_list_item.delete()
-        return redirect('wishlist')
-
-    return render(request, 'wishlistdelete.html', {'WishListItems': wish_list_item})
-
-
 @csrf_exempt  # Add this too.
 def delete(request, id):
     return render(request, 'wishlistdelete.html',
@@ -73,6 +67,59 @@ def deleteconfirm(request, id):
         print("r=", request.POST)
         WishListItem.objects.get(id=id).delete()
     return HttpResponseRedirect('/wishlist/')
+
+
+def wish_list_add(request):
+    context = {}
+    context['form'] = WishListForm
+    if request.method == 'POST':
+        WishListAdd = WishListForm(request.POST)
+        if WishListAdd.is_valid():
+
+            f = open("microservice.txt", "w")
+            f.write('#' + WishListAdd.data.get('name'))
+            f.close()
+            response = ''
+            while True:
+                f = open("microservice.txt", "r")
+                response = f.readline()
+                f.close()
+                if response and response[0] != '#':
+                    break
+                sleep(0.05)
+
+            item = WishListAdd.save(commit=False)
+            item.save()
+            tag_qty = 0
+            new_tags = []
+            json_object = json.loads(response)
+            for word_info in json_object:
+                tag_qty += 1
+                if tag_qty <= 10:
+                    new_tag = WishListItemTag()
+                    new_tag.name = word_info['word']
+                    new_tag.save()
+                    new_tags.append(new_tag)
+                else:
+                    break
+
+            for tag in new_tags:
+                item.tags.add(tag)
+
+            return HttpResponseRedirect('/wishlist/')
+    else:
+        return render(request, "wishlistadd.html", context)
+
+
+def wish_list_item_tag_results(request, tag):
+    qty = WishListTagQuantity.objects.filter(tag__name=tag).all()
+    #print(qty[0].item.id)
+    data = []
+    for item in qty:
+        data.append(WishListItem.objects.get(id=item.item.id))
+
+    return render(request, 'wishlistitemtagsresults.html',
+                  {"object_list": data, "tag_name": tag})
 
 
 # displays the wish list item details - name and price
@@ -88,9 +135,17 @@ def wish_list_item_details(request, id):
     wish_list_item = WishListItem.objects.get(id=id)
     return render(request, 'wishlistitemdetails.html', {'object_list': [wish_list_item]})
 
+
 def wish_list_item_details_tags(request, id):
     wish_list_item = WishListItem.objects.get(id=id)
     return render(request, 'wishlistitemdetails.html', {'object_list': [wish_list_item]})
 
 
+def wish_list_update_tags(request, id):
+    wish_list_item = WishListItem.objects.get(id=id)
+    # return render(request, 'wishlistitemdetails.html', {'object_list': [wish_list_item]})
+    # return render(request, 'wishlistitemdetails.html',
+    # {"object_list": [{"id": id, "tags": WishListItem.objects.get(id=id).tags}]})
 
+    return render(request, 'wishlistitemdetails.html',
+                  {"object_list": [{"id": id, "tags": WishListItem.objects.get(id=id).tags}]})
