@@ -1,23 +1,93 @@
-<!-- templates/wishlist.html -->
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://tutorial.djangogirls.org/en/template_extending/ ––>
+
+
 
 {% extends "base.html" %}
 {% load static %}
+{% load social_share %}
 
 {% block content %}
-<h1>Wish List page</h1>
+<h1>Wish List</h1>
 
 <a href="{% url 'wish_list_add' %}"><button type="submit">Add An Item ❤</button></a>
-<p></p>
+<br>
+<br>
 <form action="{% url 'wish_list_search_results' %}" method="get">
   <input name="q" type="text" placeholder="Search in Your Wish List...">
 </form>
 
+<br>
+
+
+  <! –– Citation for the following code: ––>
+  <! –– Date: 3/12/2022 ––>
+  <! –– Modified from: ––>
+  <! –– Source URL: https://pypi.org/project/django-social-share/ ––>
+
+Share Your Wishlist: {% send_email WishListItem.name "Wish List Item: {{object_list}} Check it out!" WishListItem.name "mailto://📧’." %}  |  {% post_to_twitter "Wish List Item: {{object_list}}" "Check it out!" "Tweet This 💬" %}  |  {% post_to_facebook "Wish List Item: {{object_list}}" "Post to Facebook ✍" %}
+
+
+  <! –– Citation for the following code: ––>
+  <! –– Date: 3/12/2022 ––>
+  <! –– Modified from: ––>
+  <! –– Source URL: https://stackoverflow.com/questions/4793604/how-to-insert-an-element-after-another-element-in-javascript-without-using-a-lib––>
+<script>
+function insertAfter(referenceNode, newNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+
+}
+
+var collection = document.getElementsByClassName("mail-this");
+var child = collection[0].firstElementChild;
+insertAfter(collection[0], child);
+collection[0].remove();
+
+collection = document.getElementsByClassName("tweet-this");
+child = collection[0].firstElementChild;
+insertAfter(collection[0], child);
+collection[0].remove();
+
+collection = document.getElementsByClassName("facebook-this");
+child = collection[0].firstElementChild;
+insertAfter(collection[0], child);
+collection[0].remove();
+
+</script>
+
+<div class="wish-list-items">
+  <span class="grid-container">
   {% for WishListItem in object_list %}
-    <li>
-      <a href="{% url 'wish_list_item_details' id=WishListItem.id %}">{{ WishListItem.name }}</a>
-      <form action="{% url 'delete' WishListItem.id %}" method="post">{{ WishListItem.name }}, {{ WishListItem.price }}{% csrf_token %}<button type="submit">Delete Item 🗑</button></form>
-    </li>
-    {% endfor %}
+
+
+      <div class="grid-item">
+        <table>
+
+          <tr id="table-image"><td><a href="{% url 'wish_list_item_details' id=WishListItem.id %}">
+
+
+            {% if not WishListItem.item_photo %}
+
+                  <img src="/home/static/DEFAULT_IMAGE.png" style="width:250px;height:250px;">
+                  </a>
+                {% else %}
+                  <img src="{{ WishListItem.item_photo }}" style="width:250px;height:250px;"></a>
+                {% endif %}
+
+
+          </td><td></tr>
+        <tr><td><a href="{% url 'wish_list_item_details' id=WishListItem.id %}">{{ WishListItem.name }}</a><td></tr>
+          <tr><td><form action="{% url 'delete' WishListItem.id %}" method="post"><br><br> Price: {{ WishListItem.price }}{% csrf_token %}
+            <br><br><button type="submit">Delete Item 🗑</button></form><td></tr>
+
+        </table>
+      </div>
+  {% endfor %}
+    </span>
+  </div>
+
 
 
 

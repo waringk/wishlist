@@ -1,30 +1,87 @@
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://tutorial.djangogirls.org/en/template_extending/ ––>
+
+
 {% extends "base.html" %}
 {% load static %}
 {% load social_share %}
 
 {% block content %}
 
+<div class="item-details">
   {% for WishListItem in object_list %}
-    <h1>Wish List Item: {{ WishListItem.name }}</h1>
+
+            {% if not WishListItem.item_photo %}
+
+                  <img src="/home/static/DEFAULT_IMAGE.png" style="width:250px;height:250px;">
+                  </a>
+                {% else %}
+                  <img src="{{ WishListItem.item_photo }}" style="width:250px;height:250px;"></a>
+                {% endif %}
+
+
+  <p></p>
+    <b>Wish List Item: {{ WishListItem.name }}</b>
     {% endfor %}
 
   {% for WishListItem in object_list %}
     <p></p>
     <p></p>
-    <p>Item ID is {{ WishListItem.id }}</p>
-    <p>Item name is {{ WishListItem.name }}</p>
+    <p>Store: {{ WishListItem.store }}<br></p>
+
+
+    {% if WishListItem.item_url %}
+
+      {% if WishListItem.store == "Amazon" and WishListItem.item_url|slice:"0:4" != 'http' %}
+
+
+
+              <p>URL: <a href = 'https://www.amazon.com/dp/{{ WishListItem.item_url }}'>{{ WishListItem.item_url }}</a></p>
+
+      {% elif WishListItem.store == "Walmart" and WishListItem.item_url|slice:"0:4" != 'http' %}
+
+
+              <p>URL: <a href = 'https://www.walmart.com/ip/{{ WishListItem.item_url }}'>{{ WishListItem.item_url }}</a></p>
+
+
+
+      {% elif not WishListItem.store %}
+
+       {% else %}
+
+              <p>URL: <a href = '{{ WishListItem.item_url }}'>{{ WishListItem.item_url }}</a></p>
+
+      {% endif %}
+
+  {% endif %}
+
+
+
 
     <form action="{% url 'delete' WishListItem.id %}" method="post">{% csrf_token %}<button type="submit">Delete From Wish List🗑</button></form>
+
+
+
+  <! –– Citation for the following code: ––>
+  <! –– Date: 3/12/2022 ––>
+  <! –– Modified from: ––>
+  <! –– Source URL: https://pypi.org/project/django-social-share/ ––>
 
     <p>{% send_email WishListItem.name "Wish List Item: {{WishListItem.name}} Check it out!" WishListItem.name "mailto://📧’." %}</p>
     <p>{% post_to_twitter "Wish List Item: {{WishListItem.name}}" "Check it out!" "Tweet This 💬" %}</p>
     <p>{% post_to_facebook "Wish List Item: {{WishListItem.name}}" "Post to Facebook ✍" %}</p>
-
-
     <p></p>
     <p></p>
 
     {% endfor %}
+
+  <! –– Citation for the following code: ––>
+  <! –– Date: 3/12/2022 ––>
+  <! –– Modified from: ––>
+  <! –– Source URL: https://stackoverflow.com/questions/42771828/update-page-with-item-details-on-click-in-django ––>
+
     <script>
       function generate_tags(id) {
         id = id
@@ -41,5 +98,5 @@
 
   {% endfor %}
 
-
+</div>
 {% endblock content %}

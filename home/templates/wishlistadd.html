@@ -1,4 +1,8 @@
-<!-- templates/wishlist.html -->
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://tutorial.djangogirls.org/en/template_extending/ ––>
+
 
 {% extends "base.html" %}
 {% load static %}
@@ -6,7 +10,7 @@
 {% block content %}
 <h1>Wish List page</h1>
 
-<form method="POST" class="wish-list-form">{% csrf_token %}
+<form method="POST" class="wish-list-form" enctype="multipart/form-data">
     {% csrf_token %}
     {{form.as_p }}
 <button type="submit">Save</button></form> <a href="{% url 'wishlist' %}"><button type="submit">Cancel</button></a>

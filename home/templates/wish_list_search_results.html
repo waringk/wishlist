@@ -1,9 +1,15 @@
-<!-- templates/wishlist.html -->
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://tutorial.djangogirls.org/en/template_extending/ ––>
+
 
 {% extends "base.html" %}
 {% load static %}
 
 {% block content %}
+
+
 <h1>Wish List page</h1>
 
 
@@ -11,13 +17,12 @@
   <input name="q" type="text" placeholder="Search in Your Wish List...">
 </form>
 
-
+<div class="filter-items">
   {% for WishListItem in object_list %}
-    <li>
-      {{ WishListItem.name }}, {{ WishListItem.price }}
-    </li>
+      <p></p><a href="{% url 'wish_list_item_details' id=WishListItem.id %}">{{ WishListItem.name }}</a>
   {% endfor %}
 
+  </div>
 
 
 {% endblock content %}

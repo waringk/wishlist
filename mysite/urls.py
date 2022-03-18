@@ -1,3 +1,9 @@
+# Citation for the following code:
+# Date: 3/12/2022
+# Modified from:
+# Source URL: https://tutorial.djangogirls.org
+
+
 """mysite URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -18,12 +24,13 @@ from django.urls import path, include
 
 
 # for every URL that starts with admin/, Django will find the corresponding view
+from home.forms import UserSettingsForm
+from mysite import settings
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-
-    # we want our home page to display a list of posts
-    # import home.urls and the include function
-    # Django will redirect everything to home.urls and look for further instructions there
     path('', include('home.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 
 ]
+

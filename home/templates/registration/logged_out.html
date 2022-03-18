@@ -1,0 +1,12 @@
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Authentication ––>
+
+
+{% extends "base.html" %}
+
+{% block content %}
+  <p>Logged out!</p>
+  <a href="{% url 'login'%}">Click here to login again.</a>
+{% endblock %}

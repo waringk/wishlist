@@ -1,8 +1,122 @@
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://tutorial.djangogirls.org/en/template_extending/ ––>
+
+
 {% extends "base.html" %}
 {% load static %}
 
-<!-- templates/itemsearch.html -->
-
 {% block content %}
-<h1>Item search page</h1>
+<h1>Item Search</h1>
+
+
+<form action="{% url 'item_search_results' %}" method="POST" onsubmit="showLoader()">
+{% csrf_token %}
+  <input name="q" id="itemsearch" type="text" placeholder="Search for an Item...">
+</form>
+
+
+<form method="POST" class="item_search_results">
+    {% csrf_token %}
+    {{form.as_p }}
+</form>
+<br>
+<br>
+<h1>{{ q }}</h1><br>
+
+<div class="item-search-items">
+  <span class="">
+{% for Result in object_list %}
+      <div class="grid-item">
+        <table>
+        <tr id="table-image"><td>
+        Store: {{ Result.Store }}<br>
+        <b> {{ Result.Title }}</b><br>
+        Price: {{ Result.Price }}<br>
+        ID: {{ Result.asin }}<br>
+        <td></td></tr>
+
+    <tr><td>
+    {% if Result.store == "Amazon" and Result.item_url|slice:"0:4" != 'http' %}
+
+            <p>URL: <a href = 'https://www.amazon.com/dp/{{ Result.item_url }}'>{{ Result.item_url }}</a></p>
+
+    {% elif Result.store == "Walmart" and Result.item_url|slice:"0:4" != 'http' %}
+
+            <p>URL: <a href = 'https://www.walmart.com/ip/{{ Result.item_url }}'>{{ Result.item_url }}</a></p>
+
+    {% elif not Result.store %}
+
+
+
+     {% else %}
+
+            <p>URL: <a href = '{{ Result.item_url }}'>{{ Result.item_url }}</a></p>
+
+    {% endif %}
+    <td></tr>
+     <tr><td><img src="{{ Result.MainImage }}" style="width:250px;height:250px;">
+     <td></tr>
+        </table>
+      </div>
+	  <form action="{% url 'wishlist' %}" method="POST" class="wish-list-form">{% csrf_token %}
+    <input type="hidden" id="name" name="name" value="{{ Result.Title }}">
+    <input type="hidden" id="price" name="price" value="{{ Result.Price }}">
+    <input type="hidden" id="item_url" name="item_url" value="{{ Result.asin }}">
+    <input type="hidden" id="item_photo" name="item_photo" value="{{ Result.MainImage }}">
+    <input type="hidden" id="store" name="store" value="{{ Result.Store }}">
+
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://stackoverflow.com/questions/9139075/how-to-show-a-confirm-message-before-delete ––>
+
+<button type="submit" onclick="return confirm('Are you sure?');">Add To WishList</button></form>
+    </span>
+  </div>
+    <br>
+    {% endfor %}
+
+
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://stackoverflow.com/questions/8317219/django-show-loading-message-during-long-processing ––>
+
+<script>
+document.getElementById('itemsearch').onkeyup = function(event) {
+    if (event.keyCode == 13) {
+        //showLoader()
+        //document.activeElement.blur();
+    }
+}
+function showLoaderOnClick(url) {
+      showLoader();
+      window.location=url;
+  }
+
+/*
+Citation for the following function:
+Date: 3/12/2022
+Modified from:
+Source URL: https://thisinterestsme.com/add-html-body-javascript/
+*/
+
+
+function showLoader(){
+    var myDiv = document.createElement("div");
+    myDiv.id = 'div_id';
+    myDiv.innerHTML = '<div class="overlay-container"><div class="modal-window"><div class="inner-window">Loading...</div></div></div>'
+    document.body.appendChild(myDiv);
+    document.activeElement.blur();
+
+  }
+</script>
+
+
 {% endblock content %}
+
+
+
+

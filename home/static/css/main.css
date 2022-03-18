@@ -1,17 +1,45 @@
+/* Citation for the following code: */
+/* Date: 3/12/2022 */
+/* Modified from: */
+/* Source URL: https://tutorial.djangogirls.org/en/css/ */
+
+
 h1 a, h2 a {
-    color: #C25100;
+    color: #0B0B45;
     font-family: 'Lobster';
 }
 
-
-
-body {
-    padding-left: 15px;
+h5 {
+  display: inline !important;
 }
 
+body{
+ margin: 0;
+ padding: 0;
+ background: #f3f3ee;
+ height: 100vh;
+ padding-top: 200px;
+
+
+}
+.container{
+margin-left:10px;
+float: left;
+ width: 100%;
+ background-color: #f3f3ee;
+ border-radius: 20px;
+ box-shadow: 0px 25px 40px #1687d933;
+
+}
+
+
 .page-header {
-    background-color: #C25100;
-    margin-top: 0;
+    text-align: left;
+    position:relative;
+    background-color: #0B0B45;
+    position:fixed;
+    width: 100%;
+    top:0;
     margin-bottom: 40px;
     padding: 20px 20px 20px 40px;
 }
@@ -21,7 +49,7 @@ body {
 .page-header h1 a:visited,
 .page-header h1 a:active {
     color: #ffffff;
-    font-size: 36pt;
+    font-size: 24pt;
     text-decoration: none;
 }
 
@@ -32,54 +60,179 @@ h4 {
     font-family: 'Lobster', cursive;
 }
 
-.date {
-    color: #828282;
-}
-
-.save {
-    float: right;
-}
 
 .wish-list-form textarea,
 .wish-list-form input {
     width: 100%;
 }
 
-.top-menu,
-.top-menu:hover,
-.top-menu:visited {
-    color: #ffffff;
-    float: right;
-    font-size: 26pt;
-    margin-right: 20px;
+.filter-items {
+  background-color:#ffffff;
+  border: ridge;
+
+  }
+
+.user-information-form textarea,
+.user-information-form input {
+    width: 100%;
 }
 
-.post {
-    margin-bottom: 70px;
-}
-
-.post h2 a,
-.post h2 a:visited {
-    color: #000000;
-}
-
-.post > .date,
-.post > .actions {
-    float: right;
-}
-
-.btn-secondary,
-.btn-secondary:visited {
-    color: #C25100;
-    background: none;
-    border-color: #C25100;
-}
-
-.btn-secondary:hover {
-    color: #FFFFFF;
-    background-color: #C25100;
-}
 
 div button{
     display:inline-block;
+}
+
+h5 {
+    display: inline-block;
+}
+
+
+/* Citation for the following code for navigation, li, and .active: */
+/* Date: 3/12/2022 */
+/* Modified from: */
+/* Source URL: https://www.w3schools.com/css/tryit.asp?filename=trycss_navbar_horizontal_dividers */
+
+#navigation-ul {
+  top: 90px;
+  padding: 0;
+  position: absolute;
+  width:100%;
+  float: left;
+  list-style-type: none;
+  margin: 0 0 1em 0;
+  background-color: #333;
+  height:relative;
+
+}
+
+li {
+  float: left;
+  border-right:1px solid #bbb;
+}
+
+li:last-child {
+  border-right: none;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #04AA6D;
+}
+
+.wish-list-items {
+  width: 90%;
+  background-color:#ffffff;
+    margin-bottom: 40px;
+  border-color: black;
+}
+
+
+.item-details {
+  width: 100%;
+  background-color:#ffffff;
+  margin-bottom: 40px;
+  border-color: black;
+  border: ridge;
+}
+
+b {
+font-size: 20px;
+
+
+}
+
+.item-search-items {
+  width: 100%;
+
+    margin-bottom: 40px;
+  border-color: black;
+}
+
+.single-item {
+  width: 80%;
+  background-color:#ffffff;
+  border-style: solid;
+  border-color: red;
+}
+
+table {
+  border: 1px solid;
+height:100%;
+width:100%;
+
+}
+
+td {
+  max-width: auto;
+
+}
+
+ th {
+  text-align: left;
+  padding-right: 30px;
+      border-block: 1px solid;
+}
+
+
+.table-image {
+  float: left;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+
+
+  text-align: center;
+}
+
+
+.overlay-container {
+    top: 0px;
+    z-index: 10;
+    overflow-y: visible;
+    text-align: center;
+    outline: none;
+    background-color: rgba(68, 68, 68, 0.5);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    position: fixed;
+}
+
+.modal-window {
+
+    flex-flow: row nowrap;
+    max-width: 975px;
+    border: 1px solid rgb(233, 233, 233);
+    display: inline-flex;
+    position: relative;
+    margin-top: 300px;
+}
+
+
+.inner-window{
+    border-radius: 0px;
+    width: 458px;
+    top: auto;
+    background-color: rgba(255, 255, 255, 1.0);
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
 }

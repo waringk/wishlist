@@ -1,0 +1,29 @@
+<! –– Citation for the following code: ––>
+<! –– Date: 3/12/2022 ––>
+<! –– Modified from: ––>
+<! –– Source URL: https://tutorial.djangogirls.org/en/template_extending/ ––>
+
+
+
+
+{% extends "base.html" %}
+{% block title %}
+Profile Page
+{% endblock title %}
+{% block content %}
+    <div>
+        <h1>User Settings: {{user.username}}</h1>
+
+    </div>
+
+    {% csrf_token %}
+    {{user_form.username}}
+    {{user_form.email}}
+    {{profile_form.bio}}
+<form method="POST" class="user-information-form">{% csrf_token %}
+    {{form.as_p }}
+<button type="submit">Save</button></form> <a href="{% url 'user_settings' %}"><button type="submit">Cancel</button></a>
+
+
+
+{% endblock content %}
