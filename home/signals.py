@@ -1,8 +1,3 @@
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://dev.to/earthcomfy/django-user-profile-3hik
-
 # this file is used to modify or create a DB entry based on an event
 
 from django.db.models.signals import post_save

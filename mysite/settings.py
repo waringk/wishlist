@@ -1,7 +1,4 @@
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://tutorial.djangogirls.org
+
 
 """
 Django settings for mysite project.
@@ -19,6 +16,13 @@ from pathlib import Path
 
 import os
 
+import environ
+
+
+env = environ.Env()
+environ.Env.read_env()
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,14 +30,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-18haued92#*k_!@xh6+u@sd^aga8b55=1chfys_eyn=w+**&uu'
+
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'dairymoose.mynetgear.com']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', '192.168.1.16']
 
 # Application definition
+
+UPLOAD_ROOT = os.path.join(BASE_DIR, 'media/images/')
+UPLOAD_URL = '/images/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'home/static/')
 MEDIA_URL = '/home/static/'
@@ -46,7 +54,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
-    'django_social_share'
+    'django_social_share',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -130,6 +139,6 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'wishlist/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

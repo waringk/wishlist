@@ -1,15 +1,15 @@
-# Citation for the code from this file:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://www.datasciencecentral.com/how-to-scrape-amazon-product-data/
-
 import re
 from urllib.parse import urlencode
 import scrapy
 from home import spider_spawner
 
-API = '2432af4bc519ab7c1c05de40daef45c3'
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
+
+
+API = env('API_KEY')
 
 def get_url(url):
     """Get the API Key and retail URL for web scraping."""
@@ -65,7 +65,8 @@ class AmazonSpider(scrapy.Spider):
         image = None
         if img is not None:
             image = img.groups()[0]
-        price = response.xpath('//*[@id="priceblock_ourprice"]/text()').extract_first()
+        #price = response.xpath('//*[@id="priceblock_ourprice"]/text()').extract_first()
+        price = response.xpath('//*[@id="priceblock_ourprice"]/*[1]/text()').extract_first()
 
         if not price:
             price = response.xpath('//*[@data-asin-price]/@data-asin-price').extract_first() or \

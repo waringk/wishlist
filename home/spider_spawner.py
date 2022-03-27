@@ -1,8 +1,3 @@
-# Citation for the file:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://stackoverflow.com/questions/41495052/scrapy-reactor-not-restartable
-
 # this file forks a separate process to run the web scraping spider multiple times
 
 from multiprocessing import Queue, Process

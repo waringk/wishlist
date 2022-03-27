@@ -1,14 +1,17 @@
-# Citation for the code from this file:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://www.datasciencecentral.com/how-to-scrape-amazon-product-data/
 
 
 from urllib.parse import urlencode
 import scrapy
 from home import spider_spawner
 
-API = '2432af4bc519ab7c1c05de40daef45c3'
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
+
+API = env('API_KEY')
+
 
 
 def get_url(url):
@@ -57,6 +60,7 @@ class WalmartSpider(scrapy.Spider):
         title = response.xpath('//*[@class="f3 b lh-copy dark-gray mt1 mb2"]/text()').extract_first()
         image = response.xpath('string(//*[@class="mr3 ml7 self-center relative"][1]/*[1]/*[1]/@src)').extract_first()
         price = response.xpath('(//*[@itemprop="price"])[1]/text()').extract_first()
+
         store = "Walmart"
         self.last_return = {'asin': pid, 'Title': title, 'Price': price, 'MainImage': image, 'Store': store}
         if self.last_return['Title'] != '' and self.last_return['Title'] is not None:

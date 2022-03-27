@@ -1,1 +1,0 @@
-[{"word":"cracker","score":1163}]

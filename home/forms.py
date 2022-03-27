@@ -1,11 +1,7 @@
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://tutorial.djangogirls.org/en/django_forms/
-
 # This file creates a form for adding and editing our models
 
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.db import models
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
@@ -25,10 +21,6 @@ class WishListForm(forms.ModelForm):
         fields = ('name', 'price', 'item_url', 'item_photo', 'store')
 
 
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://stackoverflow.com/questions/1075314/allow-changing-of-user-fields-like-email-with-django-profiles
 
 class UserSettingsForm(forms.ModelForm):
     # tell Django to use the user settings model to create the form
@@ -46,11 +38,16 @@ class UserSettingsForm(forms.ModelForm):
         return settings
 
 
-class UpdateProfileForm(forms.ModelForm):
-    # tell Django to use the user settings model to create the form
-    bio = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))
+class NewUserForm(UserCreationForm):
+    email = forms.EmailField(required=True)
 
     class Meta:
-        # specify the fields that should be on the form
-        model = UserSettings
-        fields = ['bio']
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(NewUserForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user

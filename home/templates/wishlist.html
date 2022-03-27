@@ -1,10 +1,3 @@
-<! –– Citation for the following code: ––>
-<! –– Date: 3/12/2022 ––>
-<! –– Modified from: ––>
-<! –– Source URL: https://tutorial.djangogirls.org/en/template_extending/ ––>
-
-
-
 {% extends "base.html" %}
 {% load static %}
 {% load social_share %}
@@ -22,18 +15,9 @@
 <br>
 
 
-  <! –– Citation for the following code: ––>
-  <! –– Date: 3/12/2022 ––>
-  <! –– Modified from: ––>
-  <! –– Source URL: https://pypi.org/project/django-social-share/ ––>
-
 Share Your Wishlist: {% send_email WishListItem.name "Wish List Item: {{object_list}} Check it out!" WishListItem.name "mailto://📧’." %}  |  {% post_to_twitter "Wish List Item: {{object_list}}" "Check it out!" "Tweet This 💬" %}  |  {% post_to_facebook "Wish List Item: {{object_list}}" "Post to Facebook ✍" %}
 
 
-  <! –– Citation for the following code: ––>
-  <! –– Date: 3/12/2022 ––>
-  <! –– Modified from: ––>
-  <! –– Source URL: https://stackoverflow.com/questions/4793604/how-to-insert-an-element-after-another-element-in-javascript-without-using-a-lib––>
 <script>
 function insertAfter(referenceNode, newNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -73,7 +57,7 @@ collection[0].remove();
                   <img src="/home/static/DEFAULT_IMAGE.png" style="width:250px;height:250px;">
                   </a>
                 {% else %}
-                  <img src="{{ WishListItem.item_photo }}" style="width:250px;height:250px;"></a>
+                  <img src="{{ WishListItem.photo_prefix }}{{ WishListItem.item_photo }}" style="width:250px;height:250px;"></a>
                 {% endif %}
 
 
@@ -87,7 +71,6 @@ collection[0].remove();
   {% endfor %}
     </span>
   </div>
-
 
 
 

@@ -1,31 +1,18 @@
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://tutorial.djangogirls.org/en/django_models/
-
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://www.sankalpjonna.com/learn-django/the-right-way-to-use-a-manytomanyfield-in-django
-
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://stackoverflow.com/questions/43894232/displaying-both-sides-of-a-manytomany-relationship-in-django-admin
-
-
 # this file stores our models of wish list items, wish list item tags, user settings
 
 from django.conf import settings
+from django.contrib.auth.backends import UserModel
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.contrib.auth.models import User
 
-
 # model for the user's settings
+from mysite.settings import UPLOAD_ROOT
+
+
 class UserSettings(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
-    email = models.EmailField('email', unique=True, blank=True)
-    bio = models.CharField(max_length=255, null=True, blank=True)
+    email = models.EmailField('email', blank=True)
     username = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
 
@@ -38,6 +25,9 @@ class WishListItemTag(models.Model):
         return self.name
 
 
+upload_storage = FileSystemStorage(location=UPLOAD_ROOT, base_url='/images')
+
+
 # model for the wish list items
 class WishListItem(models.Model):
     name = models.CharField(max_length=255)
@@ -46,10 +36,11 @@ class WishListItem(models.Model):
     selected = models.BooleanField(default=False)
     selected.required = False
     tags = models.ManyToManyField(WishListItemTag, through='WishListTagQuantity')
-    username = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, null=True, blank=True)
     item_url = models.CharField(max_length=200, null=True, blank=True)
     item_description = models.CharField(max_length=255, null=True, blank=True)
-    item_photo = models.ImageField(upload_to='wishlist/', null=True, blank=True)
+    item_photo = models.ImageField(upload_to='', null=True, blank=True, storage=upload_storage)
+    photo_prefix = models.CharField(max_length=10, default='', blank=True)
     store = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):

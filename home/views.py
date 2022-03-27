@@ -1,9 +1,3 @@
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://tutorial.djangogirls.org/en/django_views/
-
-
 # this file contains the logic of the application to display the DB models in a template
 # it creates views, requests information from the models and passes info to a template
 
@@ -14,11 +8,13 @@ import threading
 from multiprocessing import Process
 from time import sleep
 
+from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView
 from scrapy.crawler import CrawlerRunner
@@ -28,8 +24,8 @@ from twisted.internet import reactor
 from tutorial.tutorial.spiders.amazon import AmazonSpider
 from tutorial.tutorial.spiders.walmart import WalmartSpider
 from . import spider_spawner
-from .forms import WishListForm, UserSettingsForm
-from .models import WishListItem, WishListItemTag, WishListTagQuantity, UserSettings
+from .forms import WishListForm, UserSettingsForm, NewUserForm
+from .models import WishListItem, WishListItemTag, WishListTagQuantity, UserSettings, UserModel, User
 
 
 class HomePageView(TemplateView):
@@ -44,12 +40,14 @@ class ItemSearchPageView(LoginRequiredMixin, TemplateView):
     template_name = "itemsearch.html"
 
 
-class WishListView(LoginRequiredMixin, ListView):
-    """Creates the wish list view for a user."""
-    login_url = '/accounts/login/'
-    redirect_field_name = 'redirect_to'
-    model = WishListItem
-    template_name = 'wishlist.html'
+
+@login_required(login_url='/accounts/login/')
+def view_wish_list(request):
+    """Creates the wish list view for a user with their own wish list."""
+    context = {
+        'object_list': WishListItem.objects.filter(user=request.user)
+    }
+    return render(request, 'wishlist.html', context)
 
 
 class UserSettingsView(LoginRequiredMixin, ListView):
@@ -64,6 +62,7 @@ class UserSettingsView(LoginRequiredMixin, ListView):
 def user_settings(request):
     """Allows a user to update their user setting with a form. Uses UserSettingsForm for the logged in user. Captures
     POST data from the form, validates the input, and saves it to the user model."""
+
     if request.method == 'POST':
         form = UserSettingsForm(request.POST)
         if form.is_valid():
@@ -96,7 +95,13 @@ def user_settings(request):
         try:
             settings = UserSettings.objects.get(username__username=request.user)
         except UserSettings.DoesNotExist:
-            settings = None
+            settings = UserSettings()
+
+        if settings is not None:
+            if settings.email is None or len(settings.email) == 0:
+                settings.email = request.user.email
+                print("hello world")
+
         # update the user info if valid
         if settings:
             form = UserSettingsForm(instance=settings)
@@ -106,6 +111,23 @@ def user_settings(request):
         return render(request, "user_settings.html", {'form': form})
 
 
+def register(request):
+    """Allows a user to register an account on the website."""
+    if request.method == "POST":
+
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect("wishlist/")
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm()
+
+    return render(request=request, template_name="registration/register.html", context={"register_form": form})
+
+
 class WishListSearchResultsView(LoginRequiredMixin, ListView):
     """Creates search view for a user to search their wish list items."""
     login_url = '/accounts/login/'
@@ -113,25 +135,20 @@ class WishListSearchResultsView(LoginRequiredMixin, ListView):
     model = WishListItem
     template_name = 'wish_list_search_results.html'
 
+
 def wish_list_search(request):
     """Receives the search query from the user for searching items in their wish list, and filters the DB for a
     certain item."""
     query = request.GET.get('q')
-    #object_list = WishListItem.objects.filter(Q(name__icontains=query))
-    #return object_list
-    print("hello world", query)
 
     qty = WishListItem.objects.filter(Q(name__icontains=query))
     print("qty =", qty)
     data = []
     for item in qty:
-        #data.append(WishListItem.objects.get(id=item.id))
+        # data.append(WishListItem.objects.get(id=item.id))
         data.append(item)
         print("item is", item)
     return render(request, "wish_list_search_results.html", {'object_list': data})
-
-
-
 
 
 class ItemSearchResultsView(LoginRequiredMixin, ListView):
@@ -142,14 +159,8 @@ class ItemSearchResultsView(LoginRequiredMixin, ListView):
     template_name = 'item_search_results.html'
 
 
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://stackoverflow.com/questions/35647438/easiest-way-to-run-scrapy-crawler-so-it-doesnt-block-the-script
 
 crawler = None
-
-
 class CrawlerScript(Process):
     """Creates asynchronous spiders from different retailers in different processes. Allows different processes to
     handle scraping from different retailers at the same time."""
@@ -222,11 +233,6 @@ def item_search_results(request):
             break
         sleep(0.05)
 
-    # Citation for the following function:
-    # Date: 3/12/2022
-    # Modified from:
-    # Source URL: https://stackoverflow.com/questions/12749398/using-a-comparator-function-to-sort
-
     def make_comparator(less_than):
         """Uses a comparator function to compare values in tuples. In the results, if the first is greater than the
         second it returns true, or false otherwise."""
@@ -241,10 +247,6 @@ def item_search_results(request):
 
         return compare
 
-    # Citation for the following function:
-    # Date: 3/12/2022
-    # Modified from:
-    # Source URL: https://stackoverflow.com/questions/12749398/using-a-comparator-function-to-sort
 
     def store_is_less_than(x, y):
         """Handles the race condition of returning results from different items in different retail stores. Sorts the
@@ -310,11 +312,10 @@ def wish_list_add_from_form(request):
                     break
                 sleep(0.05)
 
-
             item = WishListAdd.save(commit=False)
 
-
-
+            item.photo_prefix = '/images/'
+            item.user = request.user
             item.save()
             tag_qty = 0
             new_tags = []
@@ -335,6 +336,7 @@ def wish_list_add_from_form(request):
             for tag in new_tags:
                 item.tags.add(tag)
             item.item_photo = WishListAdd.cleaned_data['item_photo']
+
             return HttpResponseRedirect('/wishlist/')
 
         # if the entry is invalid, redirect back to the wish list
@@ -361,6 +363,7 @@ def wish_list_add_from_search(request):
      item creation without tags if the microservice is not working. Redirects the user back to the updated wish list."""
 
     if request.method == 'POST':
+        print("wish list add from search")
         WishListAdd = WishListItem()
 
         # makes a request to the microservice to create tags data
@@ -394,6 +397,7 @@ def wish_list_add_from_search(request):
         WishListAdd.item_url = request.POST.get('item_url')
         WishListAdd.item_photo = request.POST.get('item_photo')
         WishListAdd.store = request.POST.get('store')
+        WishListAdd.user = request.user
         WishListAdd.save()
         tag_qty = 0
         new_tags = []

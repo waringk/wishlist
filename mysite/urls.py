@@ -1,9 +1,3 @@
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://tutorial.djangogirls.org
-
-
 """mysite URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -19,11 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('home/', include('home.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-
 # for every URL that starts with admin/, Django will find the corresponding view
+from home import views
 from home.forms import UserSettingsForm
 from mysite import settings
 
@@ -31,6 +26,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-
+    path("register", views.register, name="register")
 ]
 
+# if settings.DEBUG:
+#    urlpatterns += static(settings.MEDIA_URL,
+#                          document_root=settings.MEDIA_ROOT)

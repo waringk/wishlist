@@ -1,8 +1,3 @@
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://tutorial.djangogirls.org/en/django_admin/
-
 
 # this file is used to add, edit and delete wish list items that we've modeled
 # import/include the model, and make our model visible on the admin page

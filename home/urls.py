@@ -1,15 +1,9 @@
-# Citation for the following code:
-# Date: 3/12/2022
-# Modified from:
-# Source URL: https://tutorial.djangogirls.org/en/django_urls/
-
-
 # this file assigns views to URLs, and uses the Django URL resolver to direct the page navigation
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 from . import views
-from .views import HomePageView, WishListView, WishListSearchResultsView, ItemSearchPageView, UserSettingsView
+from .views import HomePageView, WishListSearchResultsView, ItemSearchPageView, UserSettingsView
 
 
 urlpatterns = [
@@ -47,5 +41,6 @@ urlpatterns = [
     # user settings menu view
     path("user_settings/", views.user_settings, name="user_settings"),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+]   + static(settings.UPLOAD_URL, document_root=settings.UPLOAD_ROOT)\
+              + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
